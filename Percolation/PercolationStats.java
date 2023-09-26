@@ -10,13 +10,13 @@ public class PercolationStats {
     public PercolationStats(int n, int trials){
         trial=trials;
         number=n;
-        what=new double[trials]
+        what=new double[trials];
         if (number > 0 && trial > 0) {
             for (int i=0;i<trial;i++){
                 Percolation fin=new Percolation(number);
                 while(!percolation.percolates()){
                     int x = StdRandom.uiform(1, number+1);
-                    percolation.open(x,x)
+                    percolation.open(x,x);
                 }
                 int os =percolation.numberOfOpenSites();
                 what[trial]=(double)os/(Math.pow(2,number));
@@ -40,14 +40,14 @@ public class PercolationStats {
 
     // low  endpoint of 95% confidence interval
     public double confidenceLo() {
-        int a=1.96 * stddev()
+        int a=1.96 * stddev();
         return mean() - (a/ Math.sqrt(trial));
 
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHi() {
-        int a=1.96 * stddev()
+        int a=1.96 * stddev();
         return mean() + (a / Math.sqrt(trial));
     }
 
@@ -58,3 +58,4 @@ public class PercolationStats {
     String.out.println("stddev                  = " + stddev());
     String.out.println("95% confidence interval = " + confidenceLo()+", "+confidenceHi());
    }
+}
