@@ -19,6 +19,8 @@ public class Percolation {
         tailIndex=n+1;
         openStatus=new boolean[n][n];
         numOpen=0;
+        wquuf=new WeightedQuickUnionUF(n*n +1);
+        normalQU=new WeightedQuickUnionUF (n*n +2);
         // Check boundary conditions and initialize class variables
     }
     private int getIndex(int row, int col) {
@@ -33,21 +35,27 @@ public class Percolation {
         numOpen++;
         if(row==1){
             wquuf.union(headIndex,getIndex(row, col));
+            normalQU.union(headIndex,getIndex(row, col));
         }
         if(row==dimension){
             wquuf.union(getIndex(row,col),tailIndex);
+            normalQU.union(getIndex(row,col),tailIndex);
         }
         if(isOpen(row-1,col)){
             wquuf.union(getIndex(row-1,col),getIndex(row,col));
+            normalQU.union(getIndex(row-1,col),getIndex(row,col));
         }
         if(isOpen(row,col-1)){
             wquuf.union(getIndex(row-1,col),getIndex(row,col));
+            normalQU.union(getIndex(row-1,col),getIndex(row,col));
         }
         if(isOpen(row+1,col)){
             wquuf.union(getIndex(row-1,col),getIndex(row,col));
+            normalQU.union(getIndex(row-1,col),getIndex(row,col));
         }
         if(isOpen(row,col+1)){
             wquuf.union(getIndex(row-1,col),getIndex(row,col));
+            normalQU.union(getIndex(row-1,col),getIndex(row,col));
         }
         //See the slide in the Union-Find Applications about how to do open - slide 59/60 about 7:10 in.
         //Check the top and bottom
@@ -66,7 +74,7 @@ public class Percolation {
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
         verify(row,col);
-        return wquuf.find(getIndex(row,col));
+        return wquuf.find(getIndex(row,col))==wquuf.find(headIndex);
 
         // Is there a path from the top to the specified Index?
     }
@@ -77,7 +85,7 @@ public class Percolation {
     // does the system percolate?
     public boolean percolates() {
        //Is there a path between top and bottom? 
-        return wquuf.find(tailIndex);
+        return wquuf.find(tailIndex)=wquuf.find(headIndex);
     }
     public void verify(int row, int col){
         if(row>dimension || row<=0 || col>dimension || col<=0){
