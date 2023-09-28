@@ -1,61 +1,66 @@
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
-import edu.princeton.cs.algs4.WeightedQuickUnionUF;
-
 public class PercolationStats {
+    private static final double CONFIDENCE_95 = 1.96;
+    private final double[] results;
     private int trial;
-    private int number;
-    private double[] what;
-    // perform independent trials on an n-by-n grid
-    public PercolationStats(int n, int trials){
-        trial=trials;
-        number=n;
-        what=new double[trials];
-        if (number > 0 && trial > 0) {
-            for (int i=0;i<trial;i++){
-                Percolation fin=new Percolation(number);
-                while(!percolation.percolates()){
-                    int x = StdRandom.uiform(1, number+1);
-                    percolation.open(x,x);
-                }
-                int os =percolation.numberOfOpenSites();
-                what[trial]=(double)os/(Math.pow(2,number));
-            }
-        }
-        else{
-          throw new IllegalArgumentException("Out of bounds");  
-        }
 
+    /**
+     * Perform trials independent experiments on an n-by-n grid.
+     */
+    public PercolationStats(int n, int trials) {
+        if(n<=0){
+            throw new IllegalArgumentException("Out of Bounds");
+        }
+        trial=trials;
+        results=new double[n];
+        for(int i=1;i<=trials;i++){
+            Percolation a=new Percolation(n);
+            while(!a.percolates()){
+                int row = StdRandom.uniformInt(1, n + 1);
+                int col = StdRandom.uniformInt(1, n + 1);
+                a.open(row, col);
+            }
+            double z = (double) a.numberOfOpenSites() / (n * n);
+            results[i] = z;
+
+            }
+        
+       //Check input parameters
+       //Initialize class variables
+       //Run trials - for each trial create a new percolation object and randomly open a site until it percolates
+       //set results to percentage of sites that have to be opened before it percolates
     }
-    // sample mean of percolation threshold
-     // sample mean of percolation threshold
     public double mean() {
-        return StdStats.mean(trial);
+        return StdStats.mean(results);
     }
 
     // sample standard deviation of percolation threshold
     public double stddev() {
-        return StdStats.stddev(trial);
+        return StdStats.stddev(results);
     }
 
     // low  endpoint of 95% confidence interval
     public double confidenceLo() {
-        int a=1.96 * stddev();
-        return mean() - (a/ Math.sqrt(trial));
+        return mean() - ((CONFIDENCE_95*stddev())/ Math.sqrt(trial));
 
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHi() {
-        int a=1.96 * stddev();
-        return mean() + (a / Math.sqrt(trial));
+        return mean() + ((CONFIDENCE_95*stddev())/ Math.sqrt(trial));
     }
-
-   // test client (see below)
-   public static void main(String[] args){
-
-    String.out.println("mean                    = " + mean());
-    String.out.println("stddev                  = " + stddev());
-    String.out.println("95% confidence interval = " + confidenceLo()+", "+confidenceHi());
-   }
+    /**
+     * test client (described below)
+     */
+    public static void main(String[] args) {
+        int n = Integer.parseInt(args[0]);
+        int trials = Integer.parseInt(args[1]);
+        PercolationStats stats = new PercolationStats(n, trials);
+        StdOut.println("mean                    = " + stats.mean());
+        StdOut.println("stddev                  = " + stats.stddev());
+        StdOut.println("95% confidence interval = [" + stats.confidenceLo() + ", "
+                + stats.confidenceHi() + "]");
+    }
 }
