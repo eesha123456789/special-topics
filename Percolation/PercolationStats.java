@@ -5,17 +5,16 @@ public class PercolationStats {
     private static final double CONFIDENCE_95 = 1.96;
     private final double[] results;
     private int trial;
-
     /**
      * Perform trials independent experiments on an n-by-n grid.
      */
     public PercolationStats(int n, int trials) {
-        if(n<=0){
+        if(n<=0||trials<=0){
             throw new IllegalArgumentException("Out of Bounds");
         }
-        trial=trials;
-        results=new double[n];
-        for(int i=1;i<=trials;i++){
+
+        results=new double[trials];
+        for(int i=0;i<trials;i++){
             Percolation a=new Percolation(n);
             while(!a.percolates()){
                 int row = StdRandom.uniformInt(1, n + 1);

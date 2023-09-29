@@ -15,8 +15,8 @@ public class Percolation {
             throw new IllegalArgumentException("Out of bounds");
         }
         dimension=n;
-        headIndex=-1;
-        tailIndex=n;
+        headIndex=n*n;
+        tailIndex=n*n+1;
         openStatus=new boolean[n][n];
         numOpen=0;
         wquuf=new WeightedQuickUnionUF(n*n +1);
@@ -31,27 +31,29 @@ public class Percolation {
     // opens the site (row, col) if it is not open already
     public void open(int row, int col) {
         verify(row, col);
+        if(isOpen(row,col)){
+            return;
+        }
         openStatus[row-1][col-1]=true;
         numOpen++;
-        if(row==0){
+        if(row==1){
             wquuf.union(headIndex,getIndex(row-1, col-1));
             normalQU.union(headIndex,getIndex(row-1, col-1));
         }
-        if(row==dimension-1){
-            wquuf.union(getIndex(row-1,col-1),tailIndex);
+        if(row==dimension){
             normalQU.union(getIndex(row-1,col-1),tailIndex);
         }
-        if(isOpen(row-2,col-1)){
-            wquuf.union(getIndex(row-2,col-1),getIndex(row-1,col-1));
-            normalQU.union(getIndex(row-2,col-1),getIndex(row-1,col-1));
-        }
-        if(isOpen(row-1,col-2)){
-            wquuf.union(getIndex(row-1,col-2),getIndex(row-1,col-1));
-            normalQU.union(getIndex(row-1,col-2),getIndex(row-1,col-1));
-        }
         if(isOpen(row,col-1)){
-            wquuf.union(getIndex(row,col-1),getIndex(row-1,col-1));
-            normalQU.union(getIndex(row,col-1),getIndex(row-1,col-1));
+            wquuf.union(getIndex(row-1,col-1),getIndex(row,col-1)-1);
+            normalQU.union(getIndex(row-1,col-1),getIndex(row,col-1)-1);
+        }
+        if(isOpen(row-1,col)){
+            wquuf.union(getIndex(row-1,col-1),getIndex(row+1,col)-1);
+            normalQU.union(getIndex(row-1,col-1),getIndex(row+1,col)-1);
+        }
+        if(isOpen(row+1,col)){
+            wquuf.union(getIndex(row-1,col-1),getIndex(row+1,col)-1);
+            normalQU.union(getIndex(row-1,col-1),getIndex(row+1,col-1));
         }
         if(isOpen(row-1,col)){
             wquuf.union(getIndex(row-1,col),getIndex(row-1,col-1));
@@ -74,7 +76,7 @@ public class Percolation {
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
         verify(row,col);
-        return wquuf.find(getIndex(row-1,col-1))==wquuf.find(headIndex);
+        return wquuf.find(headIndex)==wquuf.find(getIndex(row-1,col-1));
 
         // Is there a path from the top to the specified Index?
     }
@@ -85,10 +87,10 @@ public class Percolation {
     // does the system percolate?
     public boolean percolates() {
        //Is there a path between top and bottom? 
-        return wquuf.find(tailIndex)==wquuf.find(headIndex);
+        return wquuf.find(headIndex)==wquuf.find(tailIndex);
     }
     private void verify(int row, int col){
-        if(row>=dimension || row<0 || col>=dimension || col<0){
+        if(row-1>=dimension || row-1<0 || col-1>=dimension || col-1<0){
             throw new IllegalArgumentException("Out of Bounds");
         }
     }
