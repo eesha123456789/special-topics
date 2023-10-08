@@ -18,6 +18,9 @@ public class Deque<Item> implements Iterable<Item> {
 
     // add the item to the front
     public void addFirst(Item item){
+        if(item==null){
+            throw new IllegalArgumentException("item is null");
+        }
         Item[] copy=new Item[size()];
         copy=list;
         if(size()+1>=(size()*2)){
@@ -37,6 +40,9 @@ public class Deque<Item> implements Iterable<Item> {
 
     // add the item to the back
     public void addLast(Item item){
+        if(item==null){
+            throw new IllegalArgumentException("item is null");
+        }
         Item[] copy=new Item[size()];
         copy=list;
         if(size()+1>=(size()*2)){
@@ -56,6 +62,9 @@ public class Deque<Item> implements Iterable<Item> {
 
     // remove and return the item from the front
     public Item removeFirst(){
+        if(list.isEmpty()){
+            throw new java.util.NoSuchElementException("Stack is empty")
+        }
         Item[] copy=new Item[size()];
         copy=list;
         if(size()-1<=(size()/4)){
@@ -73,6 +82,9 @@ public class Deque<Item> implements Iterable<Item> {
 
     // remove and return the item from the back
     public Item removeLast(){
+        if(list.isEmpty()){
+            throw new java.util.NoSuchElementException("Stack is empty")
+        }
         Item[] copy=new Item[size()];
         copy=list;
         if(size()-1<=(size()/4)){
@@ -89,7 +101,9 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     // return an iterator over items in order from front to back
-    public Iterator<Item> iterator()
+    public Iterator<Item> iterator(){
+
+    }
 
     // unit testing (required)
     public static void main(String[] args)
