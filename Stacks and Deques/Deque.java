@@ -2,7 +2,7 @@ public class Deque<Item> implements Iterable<Item> {
     public Item[] list;
     // construct an empty deque
     public Deque(){
-        list = new Item[];
+        list = new Item[1];
 
     }
 
@@ -13,26 +13,80 @@ public class Deque<Item> implements Iterable<Item> {
 
     // return the number of items on the deque
     public int size(){
-        return item[].size();
+        return list[].size();
     }
 
     // add the item to the front
     public void addFirst(Item item){
-        
+        Item[] copy=new Item[size()];
+        copy=list;
+        if(size()+1>=(size()*2)){
+            list=new Item[size()*2];
+            list[0]=item;
+            for(int i=0;i<size()/2-1;i++){
+                list[i+1]=copy[i];
+            }
+        }
+        else{
+            list[0]=item;
+            for(int i=0;i<size()/2-1;i++){
+                list[i+1]=copy[i];
+            }
+        }
     }
 
     // add the item to the back
     public void addLast(Item item){
-
+        Item[] copy=new Item[size()];
+        copy=list;
+        if(size()+1>=(size()*2)){
+            list=new Item[size()*2];
+            list[copy.size()+1]=item;
+            for(int i=0;i<size()/2-1;i++){
+                list[i]=copy[i];
+            }
+        }
+        else{
+            list[copy.size()+1]=item;
+            for(int i=0;i<size()/2-1;i++){
+                list[i]=copy[i];
+            }
+        }
     }
 
     // remove and return the item from the front
     public Item removeFirst(){
-
+        Item[] copy=new Item[size()];
+        copy=list;
+        if(size()-1<=(size()/4)){
+            list=new Item[size()/2];
+            for(int i=0;i<size()/4;i++){
+                list[i]=copy[i+1];
+            }
+        }
+        else{
+            for(int i=0;i<size()/4;i++){
+                list[i]=copy[i+1];
+            }
+        }
     }
 
     // remove and return the item from the back
-    public Item removeLast()
+    public Item removeLast(){
+        Item[] copy=new Item[size()];
+        copy=list;
+        if(size()-1<=(size()/4)){
+            list=new Item[size()/2];
+            for(int i=0;i<size()/4-1;i++){
+                list[i]=copy[i];
+            }
+        }
+        else{
+            for(int i=0;i<size()/4-1;i++){
+                list[i]=copy[i];
+            }
+        }
+    }
 
     // return an iterator over items in order from front to back
     public Iterator<Item> iterator()
