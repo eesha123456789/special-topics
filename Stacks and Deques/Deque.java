@@ -1,4 +1,7 @@
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdIn;
 
 public class Deque<Item> implements Iterable<Item> {
     // construct an empty deque
@@ -51,18 +54,18 @@ public class Deque<Item> implements Iterable<Item> {
     // remove and return the item from the front
     public Item removeFirst(){
         if(list.isEmpty()){
-            throw new java.util.NoSuchElementException("Stack is empty")
+            throw new java.util.NoSuchElementException("Stack is empty");
         }
         Item item = first.item;
         first = first.next;
         if (isEmpty()) last = null;
         length-=1;
         return item;
-
+    }
     // remove and return the item from the back
     public Item removeLast(){
         if(list.isEmpty()){
-            throw new java.util.NoSuchElementException("Stack is empty")
+            throw new java.util.NoSuchElementException("Stack is empty");
         }
         String item = last.item;
         last = last.next;
@@ -73,24 +76,8 @@ public class Deque<Item> implements Iterable<Item> {
 
     // return an iterator over items in order from front to back
     public Iterator<Item> iterator(){
-        private Node<Item> current;
 
-        public LinkedIterator(Node<Item> first) {
-            current = first;
-        }
-
-        public boolean hasNext() {
-            return current != null;
-        }
-
-        public Item next() {
-            if (!hasNext()) throw new NoSuchElementException();
-            Item item = current.item;
-            current = current.next;
-            return item;
-        }
-
-
+    
     }
 
     // unit testing (required)
