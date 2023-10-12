@@ -73,10 +73,37 @@ public class Deque<Item> implements Iterable<Item> {
 
     // return an iterator over items in order from front to back
     public Iterator<Item> iterator(){
+        private Node<Item> current;
+
+        public LinkedIterator(Node<Item> first) {
+            current = first;
+        }
+
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        public Item next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            Item item = current.item;
+            current = current.next;
+            return item;
+        }
+
 
     }
 
     // unit testing (required)
-    public static void main(String[] args)
+    public static void main(String[] args){
+        Deque<Item> fin = new Deque<Item>();
+        while (!StdIn.isEmpty()) {
+            Item item = StdIn.next();
+            if (!item==null)
+                fin.addLast(item);
+            else if (!fin.isEmpty())
+                StdOut.print(fin.addfirst() + " ");
+        }
+        StdOut.println("(" + fin.size() + " left on queue)");
+    }
 
 }
