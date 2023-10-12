@@ -5,12 +5,24 @@ import edu.princeton.cs.algs4.StdIn;
 
 public class Deque<Item> implements Iterable<Item> {
     // construct an empty deque
+    private class Node
+    {
+        Item item;
+        Node next;
+        Node prev;
+    }
+
+    private Node first;
+    private Node last;
+    private int length;
+    
     public Deque(){
-        private Node first;
-        private Node last;
-        private int length;
+        first=null;
+        last=null;
+        length=0;
 
     }
+
 
     // is the deque empty?
     public boolean isEmpty(){
@@ -27,12 +39,17 @@ public class Deque<Item> implements Iterable<Item> {
         if(item==null){
             throw new IllegalArgumentException("item is null");
         }
-        Item oldfirst = first;
+        Node oldfirst = first;
         first = new Node();
         first.item = item;
-        first.next = null;
-        if (isEmpty()) last = first;
-        else oldfirst.next = first;
+        first.next = oldfirst;
+        first.prev = null;
+        if (isEmpty()){
+            last = first;
+        }
+        else{
+            oldfirst.prev = first;
+        }
         length+=1;
     }
 
@@ -41,36 +58,48 @@ public class Deque<Item> implements Iterable<Item> {
         if(item==null){
             throw new IllegalArgumentException("item is null");
         }
-        Item oldlast = last;
+        Node oldlast = last;
         last = new Node();
         last.item = item;
         last.next = null;
-        if (isEmpty()) first = last;
-        else oldlast.next = last;
+        last.prev = oldlast;
+        if (isEmpty()){
+            first = last;
+        } 
+        else {
+            oldlast.next = last;
+        }
         length+=1;
-
     }
 
     // remove and return the item from the front
     public Item removeFirst(){
-        if(list.isEmpty()){
+        if(isEmpty()){
             throw new java.util.NoSuchElementException("Stack is empty");
         }
         Item item = first.item;
         first = first.next;
-        if (isEmpty()) last = null;
-        length-=1;
+        if (isEmpty()){
+            last = first;
+        }
+        else{
+            first.prev = null;
+        } 
         return item;
     }
     // remove and return the item from the back
     public Item removeLast(){
-        if(list.isEmpty()){
+        if(isEmpty()){
             throw new java.util.NoSuchElementException("Stack is empty");
         }
-        String item = last.item;
+        Item item = last.item;
         last = last.next;
-        if (isEmpty()) first = null;
-        length-=1;
+        if (isEmpty()){
+            first = last;
+        }
+        else{
+            last.next = null;
+        } 
         return item;
     }
 
