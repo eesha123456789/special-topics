@@ -92,8 +92,9 @@ public class Deque<Item> implements Iterable<Item> {
         if(isEmpty()){
             throw new java.util.NoSuchElementException("Stack is empty");
         }
+
         Item item = last.item;
-        last = last.next;
+        last = last.prev;
         if (isEmpty()){
             first = last;
         }
@@ -104,16 +105,35 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     // return an iterator over items in order from front to back
-    public Iterator<Item> iterator(){
+    public Iterator<Item> iterator()  {
+        return new LinkedIterator(first);
+    }
 
-    
+    // a linked-list iterator
+    private class LinkedIterator implements Iterator<Item> {
+        private Node current;
+
+        public LinkedIterator(Node first) {
+            current = first;
+        }
+
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        public Item next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            Item item = current.item;
+            current = current.next;
+            return item;
+        }
     }
 
     // unit testing (required)
     public static void main(String[] args){
         Deque<Item> fin = new Deque<Item>();
-        while (!StdIn.isEmpty()) {
-            Item item = StdIn.next();
+        while (!fin.isEmpty()) {
+            Item item = fin.next();
             if (!item==null)
                 fin.addLast(item);
             else if (!fin.isEmpty())
