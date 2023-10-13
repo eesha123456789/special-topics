@@ -129,17 +129,17 @@ public class Deque<Item> implements Iterable<Item> {
         }
     }
 
-    // unit testing (required)
+    /*unit testing (required)
     public static void main(String[] args){
-        Deque<Item> fin = new Deque<Item>();
+        Deque<Integer> fin = new Deque<Integer>();
         while (!fin.isEmpty()) {
-            Item item = fin.next();
+            Integer item = nextInt();
             if (!item==null)
                 fin.addLast(item);
             else if (!fin.isEmpty())
                 StdOut.print(fin.addfirst() + " ");
         }
         StdOut.println("(" + fin.size() + " left on queue)");
-    }
+    }*/
 
 }

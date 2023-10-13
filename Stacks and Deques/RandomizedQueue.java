@@ -1,4 +1,6 @@
+import java.util.Iterator;
 import java.util.NoSuchElementException;
+
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
         private Item[] a;  
@@ -52,6 +54,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     // return a random item (but do not remove it)
     public Item sample(){
         Item fin=a[(int)Math.floor(Math.random() * (size()+ 1))];
+        return fin;
     }
 
     // return an independent iterator over items in random order
@@ -78,6 +81,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     // unit testing (required)
-    public static void main(String[] args)
+    public static void main(String[] args){
+        
+    }
 
 }
