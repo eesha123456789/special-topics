@@ -1,6 +1,5 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import edu.princeton.cs.algs4.StdIn;
 
 public class Deque<Item> implements Iterable<Item> {
     // construct an empty deque
