@@ -1,6 +1,8 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import edu.princeton.cs.algs4.StdRandom;
+
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
         private Item[] a;  
@@ -37,10 +39,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public Item dequeue(){
         if (isEmpty()){
             throw new NoSuchElementException("Stack underflow");
-        }       
-        Item item = a[n-1];
-        a[n-1] = null;                             
-        n--;
+        }     
+        int random=StdRandom.uniformInt(0, n-1);  
+        Item item = a[random];                          
         if (n > 0 && n == a.length/4){
             Item[] copy = (Item[]) new Object[size()/2];
             for (int i = 0; i < n; i++) {
@@ -48,6 +49,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             }
             a = copy;
         }
+        a[random]=a[n-1];
+        a[n-1]=null;
+        n--;
         return item;
     }
 
