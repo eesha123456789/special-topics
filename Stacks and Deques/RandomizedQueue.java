@@ -86,7 +86,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args){
-        
+        RandomizedQueue<Integer> fin= new RandomizedQueue<>();
+        fin.enqueue(5);
+        fin.enqueue(10);
+        fin.dequeue();
+        Iterator<Integer> iterator=fin.iterator();
+        System.out.println(iterator.next());
     }
 
 }
