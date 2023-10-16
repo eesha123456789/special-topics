@@ -68,7 +68,7 @@ public class Deque<Item> implements Iterable<Item> {
         else {
             oldlast.next = last;
         }
-        length+=1;
+    
     }
 
     // remove and return the item from the front
