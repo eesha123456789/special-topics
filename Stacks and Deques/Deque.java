@@ -132,14 +132,13 @@ public class Deque<Item> implements Iterable<Item> {
     //unit testing (required)
     public static void main(String[] args){
         Deque<Integer> fin = new Deque<Integer>();
-        while (!fin.isEmpty()) {
-            Integer item = fin.iterator().next();
-            if (item!=null)
-                fin.addFirst(item);
-            else if (!fin.isEmpty())
-                System.out.print(fin.removeFirst()+" ");
-        }
-        System.out.println("(" + fin.size() + " left on queue)");
+        fin.addFirst(2);
+        fin.addLast(3);
+        fin.addFirst(5);
+        fin.removeLast();
+        fin.removeFirst();
+        Iterator<Integer> iterator = fin.iterator();
+        System.out.println(iterator.next());
     }
 
 }
