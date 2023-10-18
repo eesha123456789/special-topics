@@ -22,48 +22,50 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public int size(){
         return n;
     }
+    private void resize(int length){
+        Item[]copy=(Item[]) new Object[length];
+        for(int i=0;i<n;i++){
+            copy[i]=a[i];
+        }
+        a=copy;
+        copy=null;
+    }
 
     // add the item
     public void enqueue(Item item){
         if(item==null){
-            throw new NullPointerException("item is null");
+            throw new IllegalArgumentException();
         }
-        a[n++] = item; 
+        
         if (n == a.length){
-            Item[] copy = (Item[]) new Object[2*a.length];
-            for (int i = 0; i < n; i++) {
-                copy[i] = a[i];
-            }
-            a = copy;
+            resize(a.length*2);
         }  
+        a[n++] = item; 
           
     }
 
     // remove and return a random item
     public Item dequeue(){
-        if (n==0){
+        if (isEmpty()){
             throw new NoSuchElementException("Stack underflow");
         }     
         int random=StdRandom.uniformInt(n);  
         Item item = a[random];               
-        a[random]=a[n-1];
-        a[--n]=null;
-        n--;           
-        if (n > 0 && n == a.length/4){
-            Item[] copy = (Item[]) new Object[a.length/2];
-            for (int i = 0; i < n; i++) {
-                copy[i] = a[i];
-            }
-            a = copy;
+        if(random!=n-1){
+            a[random]=a[n-1];
         }
-
+        a[n-1]=null;
+        n--;  
+        if (n > 0 && n == a.length/4){
+            resize(a.length/2);
+        }
         return item;
     }
 
     // return a random item (but do not remove it)
     public Item sample(){
-        if(n==0){
-            throw new NoSuchElementException("nothing is there");
+        if(isEmpty()){
+            throw new NoSuchElementException();
         }
         int random =StdRandom.uniformInt(n);
         return a[random];
@@ -76,27 +78,27 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // a array iterator, in reverse order
     private class ReverseArrayIterator implements Iterator<Item> {
-        private int i=n;
+        private int i;
         private int[] randomIndex;
 
 
         public ReverseArrayIterator() {
-            randomIndex=new int[i];
-            for(int k=0;k<i;k++){
-                randomIndex[k]=k;
-            }
-            StdRandom.shuffle(randomIndex);
+            i=0;
+            randomIndex=StdRandom.permutation(n);
             //call permutation here
         }
 
         public boolean hasNext() {
-            return i > 0;
+            return i <n;
         }
 
         public Item next() {
             if (!hasNext()) throw new NoSuchElementException();
-            return a[randomIndex[i--]];
+            return a[randomIndex[i++]];
 
+        }
+        public void remove() {
+            throw new java.lang.UnsupportedOperationException();
         }
     }
 
