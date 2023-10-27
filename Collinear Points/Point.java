@@ -7,7 +7,7 @@ public class Point implements Comparable<Point> {
     public Point(int x1, int y1){                       // constructs the point (x, y)
         x=x1;
         y=y1;
-    }
+    } 
     public void draw()   {
         StdDraw.point(x, y);
     }                          
@@ -25,9 +25,9 @@ public class Point implements Comparable<Point> {
         else if(y < that.y || (y==that.y && x<that.x)){
             return -1;
         }
-        else if(y>that.y){
+        else
             return 1;
-        } 
+
     }     // eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
    
     public  double slopeTo(Point that){
@@ -43,16 +43,8 @@ public class Point implements Comparable<Point> {
         return (double) (that.y-y)/(that.x-x);
     }    
 
-    public Comparator<Point> slopeOrder(){
-        
-    }              // compare two points by slopes they make with this point
+    //public Comparator<Point> slopeOrder(){}              // compare two points by slopes they make with this point
     
 
+
 }
-
-
-public class LineSegment {
-    public LineSegment(Point p, Point q)        // constructs the line segment between points p and q
-    public   void draw()                        // draws this line segment
-    public String toString()                    // string representation
- }

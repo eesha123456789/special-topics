@@ -3,10 +3,19 @@ import edu.princeton.cs.algs4.StdDraw;
 import java.util.Arrays;
 
 public class BruteCollinearPoints {
-    private final Point[] girdPoints;
+    private final Point[] gridPoints;
+    private int numOfSeg;
+    private LineSegment[] seg;
+
     public BruteCollinearPoints(Point[] points){
         gridPoints=points;
-    }    // finds all line segments containing 4 points
-    public           int numberOfSegments()        // the number of line segments
-    public LineSegment[] segments()                // the line segments
-}
+        numOfSeg=0;
+        seg=new LineSegment[1];
+    } 
+    public int numberOfSegments(){
+        return numOfSeg;
+    }        
+    public LineSegment[] segments() {
+        return seg;
+    }          
+} 
