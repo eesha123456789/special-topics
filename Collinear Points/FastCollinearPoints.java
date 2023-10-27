@@ -6,8 +6,11 @@ import java.util.Arrays;
 public class FastCollinearPoints {
     private final Point[] gridPoints;
     private int numOfSeg;
-    private LineSegment[] seg;
+    private LineSegment seg[];
     public FastCollinearPoints(Point[] points){
+        if (points==null){
+            throw new IllegalArgumentException();
+        }
         gridPoints=points;
         numOfSeg=0;
         seg=new LineSegment[2];
