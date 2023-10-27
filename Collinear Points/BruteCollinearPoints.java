@@ -22,7 +22,7 @@ public class BruteCollinearPoints {
         }
 
         numOfSeg=0;
-        seg=new LineSegment[points.length];
+        seg=new LineSegment[points.length-1];
         for(int a=0;a<points.length;a++){
             for(int b=a+1; a<points.length;b++){
                 for(int c=a+2;c<points.length;c++){
@@ -41,7 +41,7 @@ public class BruteCollinearPoints {
         
     } 
     public int numberOfSegments(){
-        return seg.length;
+        return numOfSeg;
     }        
     public LineSegment[] segments() {
         return seg;

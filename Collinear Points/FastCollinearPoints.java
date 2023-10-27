@@ -1,17 +1,29 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
-import java.util.Arrays;
 
 public class FastCollinearPoints {
-    private final Point[] gridPoints;
     private int numOfSeg;
     private LineSegment seg[];
     public FastCollinearPoints(Point[] points){
+
         if (points==null){
             throw new IllegalArgumentException();
         }
-        gridPoints=points;
+        for(int i=0;i<points.length;i++){
+            if(points[i]==null){
+                throw new IllegalArgumentException();
+            }
+            for(int k=0;k<points.length;k++){
+                if(i!=k && points[i].compareTo(points[k])==0){
+                    throw new IllegalArgumentException();
+                }
+            }
+        }
+
         numOfSeg=0;
         seg=new LineSegment[2];
     }   
