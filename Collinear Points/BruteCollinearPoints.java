@@ -1,6 +1,5 @@
-import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.StdDraw;
 import java.util.Arrays;
+import edu.princeton.cs.algs4.StdDraw;
 
 public class BruteCollinearPoints {
     private int numOfSeg;
@@ -23,16 +22,18 @@ public class BruteCollinearPoints {
 
         numOfSeg=0;
         seg=new LineSegment[points.length-1];
-        for(int a=0;a<points.length;a++){
-            for(int b=a+1; a<points.length;b++){
-                for(int c=a+2;c<points.length;c++){
-                    for (int d=a+3;d<points.length;d++){
+        Arrays.sort(points);
+
+        for(int a=0;a<points.length-3;a++){
+            for(int b=a+1; a<points.length-2;b++){
+                for(int c=b+1;c<points.length-1;c++){
+                    for (int d=c+1;d<points.length;d++){
                         if(points[a].slopeTo(points[b]) == points[b].slopeTo(points[c]) && points[b].slopeTo(points[c]) == points[c].slopeTo(points[d])){
                             LineSegment line=new LineSegment(points[a], points[b]);
-                            if(Arrays.binarySearch(seg,line)<0){
-                                seg[numOfSeg]=line;
-                                numOfSeg++;
-                            }
+                            seg[numOfSeg]=line;
+                            numOfSeg++;
+                            points[a].drawTo(points[d]);
+                            StdDraw.show();
                         }
                     }
                 }

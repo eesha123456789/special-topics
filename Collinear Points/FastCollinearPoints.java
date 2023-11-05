@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import edu.princeton.cs.algs4.In;
@@ -7,7 +6,7 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class FastCollinearPoints {
     private int numOfSeg;
-    private LineSegment seg[];
+    private LineSegment[] seg;
     public FastCollinearPoints(Point[] points){
 
         if (points==null){
@@ -23,10 +22,41 @@ public class FastCollinearPoints {
                 }
             }
         }
-
-        numOfSeg=0;
-        seg=new LineSegment[2];
+        seg = new LineSegment[points.length];
+        numOfSeg = 0;
+        Point[] pts = new Point[points.length];   
+        
+        for (Point point : points) {
+            Arrays.sort(points, point.slopeOrder());          
+            double prevSlope = 0.0;
+            
+            for (int j = 0; j < points.length; j++) {
+                double currentSlope = point.slopeTo(points[j]);
+                if(j == 0 || currentSlope != prevSlope) {
+                    
+                    if(pts.length >= 3) {
+                        seg[numOfSeg]=new LineSegment(pts[0], pts[pts.length-1]);
+                        pts[0].drawTo(pts[pts.length-1]);    
+                        StdDraw.show();   
+                    }
+                    for(int k=0;k<pts.length;k++){
+                        pts[k]=null;
+                    }
+                } 
+                prevSlope = currentSlope;
+                for(int k=0;k<pts.length;k++){
+                    if(pts[k]!=null){
+                        pts[k]=pts[j];
+                        break;
+                    }
+                } 
+                
+            }
+        }
+        
     }   
+
+
     public int numberOfSegments() {
         return numOfSeg;
     }    
