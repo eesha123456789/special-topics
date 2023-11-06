@@ -1,5 +1,6 @@
 import java.util.Arrays;
-
+import java.util.LinkedList;
+import java.util.ArrayList;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
@@ -7,6 +8,8 @@ import edu.princeton.cs.algs4.StdOut;
 public class FastCollinearPoints {
     private int numOfSeg;
     private LineSegment[] seg;
+    private Point[] points;
+
     public FastCollinearPoints(Point[] points){
 
         if (points==null){
@@ -22,47 +25,59 @@ public class FastCollinearPoints {
                 }
             }
         }
-        seg = new LineSegment[points.length];
+
+        points = points.clone();
+        seg = new LineSegment[2];
         numOfSeg = 0;
-        Point[] pts = new Point[points.length];   
+        LinkedList<Point> pts = new LinkedList<Point>();   
+        
         
         for (Point point : points) {
             Arrays.sort(points, point.slopeOrder());          
-            double prevSlope = 0.0;
-            
-            for (int j = 0; j < points.length; j++) {
-                double currentSlope = point.slopeTo(points[j]);
-                if(j == 0 || currentSlope != prevSlope) {
+            double a = 0.0;
+            for (int i = 0; i < this.points.length; i++) {
+                double b = point.slopeTo(this.points[i]);
+                    if(i == 0 || b != a) {
+                        
+                        if(pts.size() >= 3) {
+                            //Collections.sort(collinearPoints);
+                            enqueue(new LineSegment(pts.getFirst(), pts.getLast()));                
+                            pts.getFirst().drawTo(pts.getLast());    
+                            StdDraw.show();   
+                        }
+                        
+                        pts.clear();
+                    } 
                     
-                    if(pts.length >= 3) {
-                        seg[numOfSeg]=new LineSegment(pts[0], pts[pts.length-1]);
-                        pts[0].drawTo(pts[pts.length-1]);    
-                        StdDraw.show();   
-                    }
-                    for(int k=0;k<pts.length;k++){
-                        pts[k]=null;
-                    }
-                } 
-                prevSlope = currentSlope;
-                for(int k=0;k<pts.length;k++){
-                    if(pts[k]!=null){
-                        pts[k]=pts[j];
-                        break;
-                    }
-                } 
-                
+                    pts.add(this.points[i]);
+                    a = b; 
+                }
             }
-        }
-        
-    }   
+            
+        }   
 
 
     public int numberOfSegments() {
         return numOfSeg;
     }    
     public LineSegment[] segments(){
-        return seg;
+        return Arrays.copyOf(seg, numOfSeg);
     }
+
+    private void enqueue(LineSegment item) {
+        if (item == null) {
+            throw new IllegalArgumentException();
+        }
+        
+        if(numOfSeg == seg.length) {
+            LineSegment[] z = new LineSegment[2 * seg.length];
+            System.arraycopy(seg, 0, z, 0, numOfSeg);
+            seg = z;
+        }
+        
+        seg[numOfSeg++] = item;
+    }    
+
     public static void main(String[] args) {
 
         // read the n points from a file
