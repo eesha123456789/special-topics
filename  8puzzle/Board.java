@@ -1,31 +1,40 @@
 import java.util.LinkedList;
+import java.util.Arrays;
 
 public class Board {
 
     // create a board from an n-by-n array of tiles,
     // where tiles[row][col] = tile at (row, col)
-    private int[][] board;
-    private int n;
-    private int [] one_D;
+    private final int[] board;
+    private final int n;
+    private int empty_pos;
 
     public Board(int[][] tiles){
         n=tiles.length;
-        board=new int[n][n];
-        one_D=new int[n*n];
-        for(int i=0; i<n;i++){
-            for(int j=0; j<n;j++){
-                board[i][j]=tiles[i][j];
-                one_D[i*n+j]=tiles[i][j];
+        board = new int[n*n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                board[i*n+j] = tiles[i][j];
+                if(tiles[i][j] == 0){
+                    empty_pos=i*n+j;
+
+                }
             }
         }
+
     }
                                             
     // string representation of this board
     public String toString(){
         String fin = "";
-        for(int i=0;i<n*n;i++){
+        fin+=n+"\n";
+        for(int i=0;i<n;i++){
             for(int j=0; j<n;j++){
-                fin+=board[i][j];
+                fin+=board[i*n+j];
+                if(j == n-1){
+                    break;
+                }
+                fin+= " ";
             }
             fin+="\n";
         }
@@ -40,8 +49,8 @@ public class Board {
     // number of tiles out of place
     public int hamming(){
         int num =0;
-        for (int i=0; i<n*n-1;i++){
-            if(one_D[i]+1!=one_D[i+1] && one_D[i]!= 0){
+        for (int i=0; i<n*n;i++){
+            if(board[i]!=(i+1) && board[i]!= 0){
                 num++;
             }
         }
@@ -51,71 +60,98 @@ public class Board {
     // sum of Manhattan distances between tiles and goal
     public int manhattan(){
         int num =0;
-        for (int i=0; i<n*n-1;i++){
-            if(one_D[i]+1!=one_D[i+1] && one_D[i]!= 0){
-                num+= (one_D[i]-1)/n-i/n;
-                num+=(one_D[i]-1)% n - i % n;
+        for (int i=0; i<n*n;i++){
+            if(board[i]!=(i+1) && board[i]!= 0){
+                num += Math.abs(i / n - (board[i] - 1) / n) + Math.abs(i % n - (board[i] - 1) % n); 
             }
+            
         }
         return num;
     }
 
     // is this board the goal board?
     public boolean isGoal(){
-        for (int i=0; i < n*n; i++){
-            if (one_D[i]!=i){
-                return false;
+        return hamming()==0;
+    }
+
+    // does this board equal y?
+    public boolean equals(Object y){
+        if(y== board){
+            return true;
+        }
+        if(y==null || y.getClass() != board.getClass() || ((Board)y).n != n){
+            return false;
+        }
+        for (int i = 0; i < n*n; i++) {
+            if (board[i] != ((Board) y).board[i]){
+                    return false;
             }
         }
         return true;
     }
 
-    // does this board equal y?
-    public boolean equals(Object y){
-        if(board==y){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
     // all neighboring boards
     public Iterable<Board> neighbors(){
         LinkedList<Board> fin = new LinkedList<Board>();
-        int[][] a = board;
-        if(one_D[0] != 0){
-            int temp = a[one_D[0]-1][one_D[1]];
-            a[one_D[0]-1][one_D[1]] = a[one_D[0]][one_D[1]];
-            a[one_D[0]][one_D[1]] = temp;
-            fin.add(new Board(a));
+        int[] make = new int[n];
+        for(int i=0; i<n*n;i++){
+            if(i/n != 0){
+                int[][] a = Arrays.copyOf(makeBoard(),n);
+                make[i] = board[i-n];
+                make[i-n]=0;
+                fin.push(new Board(a));
+
+            }
+            if(i/n != n-1){
+                int[][] a = Arrays.copyOf(makeBoard(),n);
+                make[i] = board[i+n];
+                make[i+n]=0;
+                fin.push(new Board(a));
+            }
+            if(i%n != 0){
+                int[][] a = Arrays.copyOf(makeBoard(),n);
+                make[i] = board[i-n];
+                make[i-n]=0;
+                fin.push(new Board(a));
+            }
+            if(i%n != n-1){
+                int[][] a = Arrays.copyOf(makeBoard(),n);
+                make[i] = board[i-n];
+                make[i-n]=0;
+                fin.push(new Board(a));
+            }
+            return fin;
         }
-        if(one_D[0] != 0){
-            int temp = a[one_D[0]+1][one_D[1]];
-            a[one_D[0]+1][one_D[1]] = a[one_D[0]][one_D[1]];
-            a[one_D[0]][one_D[1]] = temp;
-            fin.add(new Board(a));
+    }
+    /*private Board nextTo(int x, int y){
+        int [][] temp = new int[n][n];
+        temp = makeBoard();
+        Board next = new Board(temp);
+        int a = next.board[x];
+        next.board[y] = next.board[x];
+        next.board[x] = a;
+        for (int i = 0; i < n*n; i++) {
+            if(board[i] == 0){
+                empty_pos= i;
+            }
         }
-        if(one_D[0] != 0){
-            int temp = a[one_D[0]][one_D[1]-1];
-            a[one_D[0]][one_D[1]-1] = a[one_D[0]][one_D[1]];
-            a[one_D[0]][one_D[1]] = temp;
-            fin.add(new Board(a));
+        return next;
+    }*/
+    private int[][] makeBoard(){
+        int[][] temp = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                temp[i][j]=board[i*n+j];
+            }
         }
-        if(one_D[0] != 0){
-            int temp = a[one_D[0]][one_D[1]+1];
-            a[one_D[0]][one_D[1]+1] = a[one_D[0]][one_D[1]];
-            a[one_D[0]][one_D[1]] = temp;
-            fin.add(new Board(a));
-        }
-        return fin;
+        return temp;
 
     }
 
     // a board that is obtained by exchanging any pair of tiles
     public Board twin(){
-        int[][] a = board;
-        if(board[0][1] != 0 && board[0][0] != 0){
+        int[][] a = makeBoard();
+        if(a[0][1] != 0 && a[0][0] != 0){
             int temp = a[0][1];
             a[0][1] = a[0][0];
             a[0][0] = temp;
