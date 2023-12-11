@@ -1,4 +1,5 @@
-import java.util.LinkedList;
+import edu.princeton.cs.algs4.Queue;
+
 import java.util.Arrays;
 
 public class Board {
@@ -7,7 +8,6 @@ public class Board {
     // where tiles[row][col] = tile at (row, col)
     private final int[] board;
     private final int n;
-    private int empty_pos;
 
     public Board(int[][] tiles){
         n=tiles.length;
@@ -15,10 +15,6 @@ public class Board {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 board[i*n+j] = tiles[i][j];
-                if(tiles[i][j] == 0){
-                    empty_pos=i*n+j;
-
-                }
             }
         }
 
@@ -76,52 +72,59 @@ public class Board {
 
     // does this board equal y?
     public boolean equals(Object y){
-        if(y== board){
+        if(y == board || board == y ){
             return true;
         }
-        if(y==null || y.getClass() != board.getClass() || ((Board)y).n != n){
+        if(y==null || y.getClass() != board.getClass()|| n != ((Board)(y)).n || board != y){
             return false;
         }
-        for (int i = 0; i < n*n; i++) {
-            if (board[i] != ((Board) y).board[i]){
-                    return false;
-            }
-        }
-        return true;
+        return Arrays.equals(board,((Board) y).board);
     }
 
     // all neighboring boards
     public Iterable<Board> neighbors(){
-        LinkedList<Board> fin = new LinkedList<Board>();
-        int[] make = new int[n];
-        for(int i=0; i<n*n;i++){
+        Queue<Board> fin = new Queue<Board>();
+        int i=-1;
+        
+        for(int j=0; j<n*n;j++){
+            if(board[j]==0){
+                i=j;
+                break;
+            }
+        }
+        if(i==-1) return null;
+
             if(i/n != 0){
-                int[][] a = Arrays.copyOf(makeBoard(),n);
-                make[i] = board[i-n];
-                make[i-n]=0;
-                fin.push(new Board(a));
+                Board make = new Board(makeBoard(board));
+                int a=make.board[i];
+                make.board[i-n] = make.board[i];
+                make.board[i]=a;
+                fin.enqueue(make);
 
             }
             if(i/n != n-1){
-                int[][] a = Arrays.copyOf(makeBoard(),n);
-                make[i] = board[i+n];
-                make[i+n]=0;
-                fin.push(new Board(a));
+                Board make = new Board(makeBoard(board));
+                int a=make.board[i];
+                make.board[i+n] = make.board[i];
+                make.board[i]=a;
+                fin.enqueue(make);
             }
-            if(i%n != 0){
-                int[][] a = Arrays.copyOf(makeBoard(),n);
-                make[i] = board[i-n];
-                make[i-n]=0;
-                fin.push(new Board(a));
+            if(i%n <= 0){
+                Board make = new Board(makeBoard(board));
+                int a=make.board[i];
+                make.board[i-1] = make.board[i];
+                make.board[i]=a;
+                fin.enqueue(make);
             }
-            if(i%n != n-1){
-                int[][] a = Arrays.copyOf(makeBoard(),n);
-                make[i] = board[i-n];
-                make[i-n]=0;
-                fin.push(new Board(a));
+            if(i%n <= n-1){
+                Board make = new Board(makeBoard(board));
+                int a=make.board[i];
+                make.board[i+1] = make.board[i];
+                make.board[i]=a;
+                fin.enqueue(make);
             }
-            return fin;
-        }
+
+        return fin;
     }
     /*private Board nextTo(int x, int y){
         int [][] temp = new int[n][n];
@@ -137,20 +140,20 @@ public class Board {
         }
         return next;
     }*/
-    private int[][] makeBoard(){
+    private int[][] makeBoard(int[] a){
         int[][] temp = new int[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                temp[i][j]=board[i*n+j];
+                temp[i][j]=a[i*n+j];
             }
         }
         return temp;
 
     }
-
+    
     // a board that is obtained by exchanging any pair of tiles
     public Board twin(){
-        int[][] a = makeBoard();
+        int[][] a = makeBoard(board);
         if(a[0][1] != 0 && a[0][0] != 0){
             int temp = a[0][1];
             a[0][1] = a[0][0];
