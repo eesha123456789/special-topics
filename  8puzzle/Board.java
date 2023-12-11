@@ -1,11 +1,12 @@
+// I am claiming authorship and acknowledge the class academic integrity and collaboration policy
+	
+	
 import edu.princeton.cs.algs4.Queue;
 
 import java.util.Arrays;
 
 public class Board {
 
-    // create a board from an n-by-n array of tiles,
-    // where tiles[row][col] = tile at (row, col)
     private final int[] board;
     private final int n;
 
@@ -19,8 +20,6 @@ public class Board {
         }
 
     }
-                                            
-    // string representation of this board
     public String toString(){
         String fin = "";
         fin+=n+"\n";
@@ -37,12 +36,12 @@ public class Board {
         return fin;
     }
 
-    // board dimension n
+
     public int dimension(){
         return n;
     }
 
-    // number of tiles out of place
+
     public int hamming(){
         int num =0;
         for (int i=0; i<n*n;i++){
@@ -53,7 +52,6 @@ public class Board {
         return num;
     }
 
-    // sum of Manhattan distances between tiles and goal
     public int manhattan(){
         int num =0;
         for (int i=0; i<n*n;i++){
@@ -65,20 +63,25 @@ public class Board {
         return num;
     }
 
-    // is this board the goal board?
+
     public boolean isGoal(){
         return hamming()==0;
     }
 
     // does this board equal y?
     public boolean equals(Object y){
-        if(y == board || board == y ){
+        if (y == board){
             return true;
         }
-        if(y==null || y.getClass() != board.getClass()|| n != ((Board)(y)).n || board != y){
+        if (y == null) {
             return false;
         }
-        return Arrays.equals(board,((Board) y).board);
+        if (y.getClass() != getClass()){
+            return false;
+        }
+
+        Board temp = (Board) y;
+        return Arrays.equals(board, temp.board);
     }
 
     // all neighboring boards
@@ -126,20 +129,6 @@ public class Board {
 
         return fin;
     }
-    /*private Board nextTo(int x, int y){
-        int [][] temp = new int[n][n];
-        temp = makeBoard();
-        Board next = new Board(temp);
-        int a = next.board[x];
-        next.board[y] = next.board[x];
-        next.board[x] = a;
-        for (int i = 0; i < n*n; i++) {
-            if(board[i] == 0){
-                empty_pos= i;
-            }
-        }
-        return next;
-    }*/
     private int[][] makeBoard(int[] a){
         int[][] temp = new int[n][n];
         for (int i = 0; i < n; i++) {
@@ -151,7 +140,6 @@ public class Board {
 
     }
     
-    // a board that is obtained by exchanging any pair of tiles
     public Board twin(){
         int[][] a = makeBoard(board);
         if(a[0][1] != 0 && a[0][0] != 0){
@@ -168,7 +156,6 @@ public class Board {
         }
     }
 
-    // unit testing (not graded)
     public static void main(String[] args){}
 
 }

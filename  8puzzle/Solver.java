@@ -1,7 +1,8 @@
+// I am claiming authorship and acknowledge the class academic integrity and collaboration policy
+//hardest part: I struggled to implement the A* algorithm bu I figured out how by implementing the shadow node which allowed me to calculate the fastest way possible to finding the solution to the 8-puzzle.
 import edu.princeton.cs.algs4.MinPQ;
 import java.util.Comparator;
 import edu.princeton.cs.algs4.Stack;
-import edu.princeton.cs.algs4.Queue;
 
 public class Solver {
 
@@ -41,7 +42,7 @@ public class Solver {
         SearchNode shadowDelMin = shadowPQ.delMin();
 
         while(!mainDelMin.outcome.isGoal() && !shadowDelMin.outcome.isGoal()) {
-
+             
             for (Board index : mainDelMin.outcome.neighbors()) {      
                 if (mainDelMin.previous == null || !index.equals(mainDelMin.previous.outcome)) {  
                     SearchNode i = new SearchNode(null, index, 0);
