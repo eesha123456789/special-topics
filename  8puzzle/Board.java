@@ -99,31 +99,27 @@ public class Board {
 
             if(i/n != 0){
                 Board make = new Board(makeBoard(board));
-                int a=make.board[i];
-                make.board[i-n] = make.board[i];
-                make.board[i]=a;
+                make.board[i] = make.board[i-n];
+                make.board[i-n]=0;
                 fin.enqueue(make);
 
             }
             if(i/n != n-1){
                 Board make = new Board(makeBoard(board));
-                int a=make.board[i];
-                make.board[i+n] = make.board[i];
-                make.board[i]=a;
+                make.board[i] = make.board[i+n];
+                make.board[i+n]=0;
                 fin.enqueue(make);
             }
             if(i%n <= 0){
                 Board make = new Board(makeBoard(board));
-                int a=make.board[i];
-                make.board[i-1] = make.board[i];
-                make.board[i]=a;
+                make.board[i] = make.board[i-1];
+                make.board[i-1]=0;
                 fin.enqueue(make);
             }
             if(i%n <= n-1){
                 Board make = new Board(makeBoard(board));
-                int a=make.board[i];
-                make.board[i+1] = make.board[i];
-                make.board[i]=a;
+                make.board[i] = make.board[i+1];
+                make.board[i+1]=0;
                 fin.enqueue(make);
             }
 
