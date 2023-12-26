@@ -26,10 +26,25 @@ public class PointSET {
             i.draw();
    }                         // draw all points to standard draw 
    public Iterable<Point2D> range(RectHV rect){             // all points that are inside the rectangle (or on the boundary) 
-   
+      Stack<Point2D> fin = new Stack<Point2D>();
+      for(Point2D i : set){
+         if(i.x()<=rect.xmax() && i.x()>=rect.xmin() && i.y()<=rect.ymax() && i.y()>=rect.ymin()){
+            fin.push(i);
+         }
+      }
+
+      return fin;
    }
    public Point2D nearest(Point2D p) {
-
+      Point2D fin = null;
+      double distance = 0;
+      for(Point2D i: set){
+         if(i.distanceTo(p)>distance){
+            distance = i.distanceTo(p);
+            fin=i;
+         }
+      }
+      return fin;
    }            // a nearest neighbor in the set to point p; null if the set is empty 
 
    //public static void main(String[] args)                  // unit testing of the methods (optional) 
