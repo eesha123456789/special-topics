@@ -1,6 +1,6 @@
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
-import edu.princeton.cs.algs4.Stack;
+import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.SET;
 
 public class PointSET {
@@ -26,10 +26,10 @@ public class PointSET {
             i.draw();
    }                         // draw all points to standard draw 
    public Iterable<Point2D> range(RectHV rect){             // all points that are inside the rectangle (or on the boundary) 
-      Stack<Point2D> fin = new Stack<Point2D>();
+      Queue<Point2D> fin = new Queue<Point2D>();
       for(Point2D i : set){
          if(i.x()<=rect.xmax() && i.x()>=rect.xmin() && i.y()<=rect.ymax() && i.y()>=rect.ymin()){
-            fin.push(i);
+            fin.enqueue(i);
          }
       }
 
