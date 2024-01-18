@@ -1,6 +1,6 @@
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
-import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.SET;
 
 public class PointSET {
@@ -15,7 +15,6 @@ public class PointSET {
       return set.size();
    }
    public void insert(Point2D p){              // add the point to the set (if it is not already in the set)
-      if(!set.contains(p))
          set.add(p);
    }
    public boolean contains(Point2D p){            // does the set contain point p? 
@@ -25,11 +24,12 @@ public class PointSET {
       for (Point2D i : set)
             i.draw();
    }                         // draw all points to standard draw 
+   
    public Iterable<Point2D> range(RectHV rect){             // all points that are inside the rectangle (or on the boundary) 
-      Queue<Point2D> fin = new Queue<Point2D>();
+      Stack<Point2D> fin = new Stack<Point2D>();
       for(Point2D i : set){
-         if(i.x()<=rect.xmax() && i.x()>=rect.xmin() && i.y()<=rect.ymax() && i.y()>=rect.ymin()){
-            fin.enqueue(i);
+         if(rect.contains(i)){
+            fin.push(i);
          }
       }
 
@@ -37,10 +37,10 @@ public class PointSET {
    }
    public Point2D nearest(Point2D p) {
       Point2D fin = null;
-      double distance = 0;
       for(Point2D i: set){
-         if(i.distanceTo(p)>distance){
-            distance = i.distanceTo(p);
+         if(fin==null)
+            fin=i;
+         else if(p.distanceTo(i) < p.distanceTo(fin)){
             fin=i;
          }
       }
