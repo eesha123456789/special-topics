@@ -7,15 +7,10 @@ public class KdTree {
     
    private class Node {
 		Point2D point;
-		Node left;
-		Node right;
+		Node left =null;
+		Node right=null;
 		boolean bool;
-		
-		Node(Point2D p) {
-			point = p;
-			left = null;
-			right = null;
-		}
+
 	}
 
    private Node begin;
@@ -67,7 +62,7 @@ public class KdTree {
 
    public void draw(){
       if (begin != null) {
-         drawNodes(begin);
+         draw(begin);
       }
    }                      
    
@@ -81,15 +76,15 @@ public class KdTree {
    }             // a nearest neighbor in the set to point p; null if the set is empty 
 
 
-   private void drawNodes(Node temp) {
+   private void draw(Node temp) {
 		temp.point.draw();
 		
 		if(temp.right != null) {
-			drawNodes(temp.right);
+			draw(temp.right);
 		}
 		
 		if(temp.left != null) {
-			drawNodes(temp.left);
+			draw(temp.left);
 		}
 	}
 
