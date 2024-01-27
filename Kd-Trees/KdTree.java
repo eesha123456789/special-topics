@@ -1,5 +1,10 @@
+/**
+ * @author Eesha Konatham attests that this code is their original work and was written in compliance with the class Academic Integrity and Collaboration Policy found in the syllabus. 
+ * It was hard to code the nearest function because I had to look for all the points that are around the point.
+ * I did this by finding the points that are on either side in the x position and then the y position and then compared the distances 
+ * However, I belive that find the distance was difficult to find especially because iit wasnt exactly to the left or right of the point
+ */
 import java.util.LinkedList;
-import java.util.List;
 
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
@@ -22,8 +27,8 @@ public class KdTree {
 	
 	private Node start;
 	private LinkedList<Point2D> list;
-	private Point2D champion;
-	private Point2D comparison;
+	private Point2D first;
+	private Point2D compare;
 	private int size;
 	
 
@@ -86,25 +91,27 @@ public class KdTree {
 						position = position.right;
 					}
 				}
-			} else {
+			} 
+			else {
 				if (p.x() < position.point.x()) {
 					if (position.left == null) {
 						makeP.bool = false;
 						position.left = makeP;
 						size++;
 						return;
-					} else {
+					} 
+					else 
 						position = position.left;
-					}
-				} else {
+				} 
+				else {
 					if (position.right == null) {
 						makeP.bool = false;
 						position.right = makeP;
 						size++;
 						return;
-					} else {
+					} 
+					else
 						position = position.right;
-					}
 				}
 
 				
@@ -113,32 +120,27 @@ public class KdTree {
 	}
 	
    
-   public boolean contains(Point2D p){
-      while (start != null) {
-         if (start.bool) {
-             if (p.x() > start.point.x()) 
-               start = start.right;
-             else if (p.x() < start.point.x()) 
-               start = start.left;
-             else if (p.y() != start.point.y()) 
-               start = start.right;
-             else 
-               return true;
-         }
-         else if (!start.bool) {
-             if (p.y() > start.point.y()) 
-               start = start.right;
-             else if (p.y() < start.point.y()) 
-               start = start.left;
-             else if (p.x() != start.point.x()) 
-               start = start.right;
-             else 
-               return true;
-         }
-     }
-     return false;
-   }            // does the set contain point p? 
-
+	public boolean contains(Point2D p) {
+		Node position = start;
+		while (position != null) {
+			if(p.equals(position.point))
+				return true;
+			
+			if (position.bool) {
+				if (p.x() < position.point.x())
+					position = position.left;
+				else
+					position = position.right;
+			}
+			else {
+				if(p.y() < position.point.y())
+					position = position.left;
+				else
+					position = position.right;
+			}
+		}
+		return false;
+	}       // does the set contain point p? 
 
    public void draw(){
       if (start != null) {
@@ -189,9 +191,69 @@ public class KdTree {
 			}	
 		}
 	}       // all points that are inside the rectangle (or on the boundary) 
-	public Point2D nearest(Point2D p){
-		return null;
-	}             // a nearest neighbor in the set to point p; null if the set is empty 
+	
+	public Point2D nearest(Point2D p) {
+		first = null;
+		compare = p;
+		
+		nearestFunc(start);
+		
+		return first;
+	}
+	
+	private void nearestFunc(Node temp) {
+		if (temp == null) return;
+		if (first == null) 
+			first = temp.point;
+		else if (compare.distanceSquaredTo(first) > compare.distanceSquaredTo(temp.point))
+			first = temp.point;
+		
+		if (temp.bool) {
+			if (compare.distanceSquaredTo(first) > compare.distanceSquaredTo(temp.point)) {
+				if(temp.point.x() >= compare.x()) {
+					nearestFunc(temp.left);
+					nearestFunc(temp.right);
+				} 
+				else {
+					nearestFunc(temp.right);
+					nearestFunc(temp.left);
+				}
+			} 
+			else {
+				if(temp.point.x() < compare.x())
+					nearestFunc(temp.right);
+				else if(temp.point.x() > compare.x())
+					nearestFunc(temp.left);
+				else {
+					nearestFunc(temp.left);
+					nearestFunc(temp.right);
+				}
+			}
+		} 
+		else {
+			if (compare.distanceSquaredTo(first) > compare.distanceSquaredTo(temp.point)) {
+				if(temp.point.y() >= compare.y()) {
+					nearestFunc(temp.left);
+					nearestFunc(temp.right);
+				} 
+				else {
+					nearestFunc(temp.right);
+					nearestFunc(temp.left);
+				}
+			} 
+			else {
+				if(temp.point.y() < compare.y())
+					nearestFunc(temp.right);
+				else if(temp.point.y() > compare.y())
+					nearestFunc(temp.left);
+				else {
+					nearestFunc(temp.left);
+					nearestFunc(temp.right);
+				}
+			}
+		}
+	}
+	// a nearest neighbor in the set to point p; null if the set is empty 
 
 
    private void draw(Node temp) {
