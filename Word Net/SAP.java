@@ -26,19 +26,24 @@ public class SAP {
  
     // a common ancestor of v and w that participates in a shortest ancestral path; -1 if no such path
     public int ancestor(int v, int w){
-        return -1;
+        HashSet<Integer> pointer = new HashSet<>();
+        pointer.add(v);
+        pointer.add(w);
+        int[] fin = softwareCache.get(pointer);
+        return fin[0];
     }
  
     // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
     public int length(Iterable<Integer> v, Iterable<Integer> w){
-
+        return -1;
     }
  
     // a common ancestor that participates in shortest ancestral path; -1 if no such path
     public int ancestor(Iterable<Integer> v, Iterable<Integer> w){
-        
+        return -1;
     }
- 
+
+
     // do unit testing of this class
     public static void main(String[] args){}
  }
