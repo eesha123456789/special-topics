@@ -17,7 +17,6 @@ public class WordNet {
         synsetIds=new HashMap<String, Bag<Integer>>();
         synsetStore=new HashMap<Integer, String>();
         sap=new SAP(main);
-        DirectedCycle DCycle = new DirectedCycle(main);
     }
  
     // returns all WordNet nouns

@@ -35,14 +35,40 @@ public class SAP {
  
     // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
     public int length(Iterable<Integer> v, Iterable<Integer> w){
-        return -1;
+        return update(v,w,"length");
     }
  
     // a common ancestor that participates in shortest ancestral path; -1 if no such path
     public int ancestor(Iterable<Integer> v, Iterable<Integer> w){
+        return update(v,w,"ancestor");
+    }
+    private int update(Iterable<Integer> v, Iterable<Integer> w, String type){
+        BreadthFirstDirectedPaths vBFDP = new BreadthFirstDirectedPaths(main, v);
+        BreadthFirstDirectedPaths wBFDP = new BreadthFirstDirectedPaths(main, w);
+        int path = Integer.MAX_VALUE;
+        boolean temp=false;
+        int dist=-2;
+        int add=-1;
+        for(int i=0;i<main.V();i++){
+            if(vBFDP.distTo(i) <path && vBFDP.hasPathTo(i) && wBFDP.distTo(i)<path && wBFDP.hasPathTo(i)){
+                add=wBFDP.distTo(i) + vBFDP.distTo(i);
+                if(path > add){
+                    path = add;
+                    temp=true;
+                    dist = i;
+                }
+            }
+        }
+        if(temp){
+            if(type.equals("length")){
+                return path;
+            }
+            else if(type.equals("ancestor")){
+                return dist;
+            }   
+        }
         return -1;
     }
-
 
     // do unit testing of this class
     public static void main(String[] args){}
