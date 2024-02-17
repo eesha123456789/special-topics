@@ -42,34 +42,45 @@ public class SAP {
     public int ancestor(Iterable<Integer> v, Iterable<Integer> w){
         return update(v,w,"ancestor");
     }
-    private int update(Iterable<Integer> v, Iterable<Integer> w, String type){
+    private int update(Iterable<Integer> v, Iterable<Integer> w, String type) {
+        validate(v);
+        validate(w);
         BreadthFirstDirectedPaths vBFDP = new BreadthFirstDirectedPaths(main, v);
         BreadthFirstDirectedPaths wBFDP = new BreadthFirstDirectedPaths(main, w);
-        int path = Integer.MAX_VALUE;
-        boolean temp=false;
-        int dist=-2;
-        int add=-1;
-        for(int i=0;i<main.V();i++){
-            if(vBFDP.distTo(i) <path && vBFDP.hasPathTo(i) && wBFDP.distTo(i)<path && wBFDP.hasPathTo(i)){
-                add=wBFDP.distTo(i) + vBFDP.distTo(i);
-                if(path > add){
-                    path = add;
-                    temp=true;
-                    dist = i;
+
+        int length = Integer.MAX_VALUE;
+        int ancestor = -1;
+        for (int i=0; i<main.V(); i++) {
+            if (vBFDP.distTo(i) < length && vBFDP.hasPathTo(i) && wBFDP.distTo(i) < length && wBFDP.hasPathTo(i)) {
+                int add = vBFDP.distTo(i) + wBFDP.distTo(i);
+                if (length > add) {
+                    length = add;
+                    ancestor = i;
                 }
             }
         }
-        if(temp){
+
+        if (length != Integer.MAX_VALUE) {
             if(type.equals("length")){
-                return path;
+                return length;
             }
             else if(type.equals("ancestor")){
-                return dist;
-            }   
-        }
+                return ancestor;
+            }
+        } 
         return -1;
-    }
 
+    }
+    private void validate (Iterable<Integer> vertices){
+        if(vertices == null){
+            throw new IllegalAccessError();
+        }
+        for(int i: vertices){
+            if(i < 0|| i >= main.V()){
+                throw new IllegalAccessError();
+            }
+        }
+    }
     // do unit testing of this class
     public static void main(String[] args){}
  }
