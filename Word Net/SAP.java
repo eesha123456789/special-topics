@@ -1,3 +1,6 @@
+// I am claiming authorship and acknowledge the class academic integrity and collaboration policy
+// The hardest part is identifying and coding for all the exceptions. Especially the one with zero vertices. I had to make sure that the code made sure it was only looking for words within the range.
+
 import java.util.HashMap;
 import java.util.HashSet;
 import edu.princeton.cs.algs4.BreadthFirstDirectedPaths;
@@ -10,7 +13,7 @@ public class SAP {
 
     public SAP(Digraph G) {
         if (G == null) {
-            throw new IllegalAccessError();
+            throw new IllegalArgumentException();
         }
 
         map = new Digraph(G);
@@ -56,16 +59,15 @@ public class SAP {
 
         if (softwareCache.containsKey(key))
             return;
-
-        BreadthFirstDirectedPaths vPath = new BreadthFirstDirectedPaths(map, v);
-        BreadthFirstDirectedPaths wPath = new BreadthFirstDirectedPaths(map, w);
+        BreadthFirstDirectedPaths vBDFP = new BreadthFirstDirectedPaths(map, v);
+        BreadthFirstDirectedPaths wBDFP = new BreadthFirstDirectedPaths(map, w);
 
         int length = Integer.MAX_VALUE;
         int ancestor = -2;
         for (int i = 0; i < map.V(); i++) {
-            if (vPath.hasPathTo(i) && vPath.distTo(i) < length && wPath.hasPathTo(i)
-                    && wPath.distTo(i) < length) {
-                int add = vPath.distTo(i) + wPath.distTo(i);
+            if (vBDFP.hasPathTo(i) && vBDFP.distTo(i) < length && wBDFP.hasPathTo(i)
+                    && wBDFP.distTo(i) < length) {
+                int add = vBDFP.distTo(i) + wBDFP.distTo(i);
                 if (length > add) {
                     length = add;
                     ancestor = i;
@@ -86,47 +88,49 @@ public class SAP {
         validate(v);
         validate(w);
 
-        BreadthFirstDirectedPaths vPath = new BreadthFirstDirectedPaths(map, v);
-        BreadthFirstDirectedPaths wPath = new BreadthFirstDirectedPaths(map, w);
+        BreadthFirstDirectedPaths vBDFP = new BreadthFirstDirectedPaths(map, v);
+        BreadthFirstDirectedPaths wBDFP = new BreadthFirstDirectedPaths(map, w);
+
         int length = Integer.MAX_VALUE;
-        boolean bool = false;
-        int ancestor = -1;
+        int ancestor = -2;
 
         for (int i = 0; i < map.V(); i++) {
-            if (vPath.hasPathTo(i) && vPath.distTo(i) < length && wPath.hasPathTo(i)
-                    && wPath.distTo(i) < length) {
-                int add = vPath.distTo(i) + wPath.distTo(i);
+            if (vBDFP.hasPathTo(i) && vBDFP.distTo(i) < length && wBDFP.hasPathTo(i)
+                    && wBDFP.distTo(i) < length) {
+                int add = vBDFP.distTo(i) + wBDFP.distTo(i);
                 if (length > add) {
                     length = add;
-                    bool=true;
                     ancestor = i;
                 }
             }
         }
 
-        if (bool) {
-            if(type.equals("ancestor")){
-                return ancestor;
-            }
+        if (length != Integer.MAX_VALUE) {
             if(type.equals("length")){
                 return length;
             }
+            else{
+                return ancestor;
+            }
         } 
-        return -1;
+        else {
+            return -1;
+        }
     }
+
 
     private void validate(int vertex) {
         if (vertex < 0 || vertex >= map.V())
-            throw new IllegalAccessError();
+            throw new IllegalArgumentException();
     }
 
     private void validate(Iterable<Integer> vertices) {
         if (vertices == null) {
-            throw new IllegalAccessError();
+            throw new IllegalArgumentException();
         }
         for (int i : vertices) {
             if (i < 0 || i >= map.V()) {
-                throw new IllegalAccessError();
+                throw new IllegalArgumentException();
             }
         }
     }
