@@ -46,6 +46,23 @@ public class SAP {
     // a common ancestor that participates in shortest ancestral path; -1 if no such
     // path
     public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
+        validate(v);
+        validate(w);
+        
+        int vcount = 0;
+        int wcount = 0;
+        
+        for (Integer i: v) {
+            vcount++;
+        }
+
+        for (Integer i: w) {
+            wcount++;
+        }
+        if(vcount==0 || wcount==0){
+            return -1;
+        }
+
         return update(v, w, "ancestor");
     }
 
@@ -87,6 +104,21 @@ public class SAP {
     private int update(Iterable<Integer> v, Iterable<Integer> w, String type) {
         validate(v);
         validate(w);
+        
+        int vcount = 0;
+        int wcount = 0;
+        
+        for (Integer i: v) {
+            vcount++;
+        }
+
+        for (Integer i: w) {
+            wcount++;
+        }
+        if(vcount==0 || wcount==0){
+            return -1;
+        }
+
 
         BreadthFirstDirectedPaths vBDFP = new BreadthFirstDirectedPaths(map, v);
         BreadthFirstDirectedPaths wBDFP = new BreadthFirstDirectedPaths(map, w);
@@ -128,7 +160,11 @@ public class SAP {
         if (vertices == null) {
             throw new IllegalArgumentException();
         }
-        for (int i : vertices) {
+        for (Integer i : vertices) {
+            if (i == null) {
+                throw new IllegalArgumentException();
+            }
+
             if (i < 0 || i >= map.V()) {
                 throw new IllegalArgumentException();
             }
